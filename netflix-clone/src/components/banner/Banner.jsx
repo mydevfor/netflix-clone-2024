@@ -10,7 +10,7 @@ const Banner = () => {
     (async () => {
       try {
         const request = await axios.get(requests.fetchNetflixOriginals);
-        console.log(request);
+        //console.log(request);
         setMovie(
           request.data.results[
             Math.floor(Math.random() * request.data.results.length)
@@ -47,6 +47,9 @@ const Banner = () => {
         </div>
         <h1 className="banner__description">
           {truncate(movie?.overview, 150)}
+                       // overview malet yefilmu description 
+                       original_name : "Big Mouth"
+                       overview : "Teenage friends find their lives upended"
         </h1>
       </div>
       <div className="banner__fadeBottom" />
