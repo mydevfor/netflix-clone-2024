@@ -1,58 +1,62 @@
-import { useState, useEffect } from 'react';
-import axios from '../../utils/Axios';
-import requests from '../../utils/Requests';
-import './banner.css'
+// import React from 'react'
+
+import { useEffect, useState } from "react";
+import axios from "../../utils/Axios.jsx";
+import requests from "../../utils/requests";
+import { truncate } from "lodash";
+import "./banner.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { fa } from "@fortawesome/free-solid-svg-icons";
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 
 
 const Banner = () => {
   const [movie, setMovie] = useState({});
   useEffect(() => {
-    (async () => {
-      try {
-        const request = await axios.get(requests.fetchNetflixOriginals);
-        //console.log(request);
-        setMovie(
-          request.data.results[
-            Math.floor(Math.random() * request.data.results.length)
-          ]
-        );
-      } catch (error) {
-        console.log("error", error);
-      }
-    })();
+    async function fetchData() {
+      const request = await axios.get(requests.fetchNetflixOriginals);
+      setMovie(
+        request?.data?.results[
+        Math.floor(Math.random() * request.data.results.length)
+        ]
+      );
+      return request;
+    }
+    fetchData();
   }, []);
 
-  // truncate is to limit the speling ex - 250
-  function truncate(str, n) {
-    return str?.length > n ? str.substr(0, n - 1) + "..." : str;
-  }
   return (
     <div
-      className="banner"
+      className="Banner"
       style={{
         backgroundSize: "cover",
         backgroundImage: `url('https://image.tmdb.org/t/p/original${movie?.backdrop_path}')`,
-        //Optional chaining: (?.)
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div className="banner__contents">
-        <h1 className="banner__title">
+      <div className="banner_contents">
+        <h1 className="banner_title">
           {movie?.title || movie?.name || movie?.original_name}
         </h1>
-        <div className="banner__buttons">
-          <button className="banner__button play">Play</button>
-          <button className="banner__button">My List</button>
+        <div className="banner_buttons">
+          <button className="banner_buttons play">Play</button>
+          <button className="banner_buttons myList">
+            <FontAwesomeIcon icon={faCircleExclamation}
+              style={{
+                fontSize: "17px",
+                marginRight: "10px",
+                transform: "rotate(180deg)",
+                fontWeight: "700"
+              }} />
+            My List
+          </button>
         </div>
-        <h1 className="banner__description">
-          {truncate(movie?.overview, 150)}
-                 
-        </h1>
+        <h1 className="banner_description">{truncate(movie?.overview, 150)}</h1>
       </div>
-      <div className="banner__fadeBottom" />
+      <div className="banner_fadeBottom" />
     </div>
   );
 };
 
-export default Banner
+export default Banner;
